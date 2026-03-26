@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Maharashtra Pradnya Shodh Pariksha - Unlock Your Potential, Master the Scholar's Path !</title>
+<meta name='robots' content='max-image-preview:large' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/united/bootstrap.min.css" integrity="sha512-K7slJiS9xNJpev8NgMlUlF0XrIoGFx0GCgH2eKadDu72vwfe3Hd6ETVQQJEuD5hm2ssyD16EbvLkCeTL87ngeQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script>
+async function getResult() {
+  let codeValue = document.getElementById("code").value.toUpperCase();
+let motherName = document.getElementById("mother").value.toUpperCase();
+if(!codeValue && !motherName) return;
+
+let res = null;
+try {
+    let response = await fetch(`res/${codeValue}.${motherName}.json`);
+    res = await response.json();
+} catch (nn) {}
+
+let resContent = '';
+
+if(!res) {
+    resContent += `No such record.<hr/>
+<button name="back" type="cancel" class="btn btn-primary" onclick="window.location.reload()">Back</button>
+`;
+document.body.innerHTML = resContent;
+
+    return;
+}
+
+if(res.rank) {
+    resContent+= "<div class='row'><img src='congrats.gif' style='background:white; height: 132px !important; width: 132px !important; margin: auto;border: 8px solid #f5a583;border-radius: 50%;' /></div>";
+}
+
+resContent += `<div class='row'><div class='col' ><b> ${res.name}</b></div></div>
+<div class='row'><div class='col' >Hall Ticket Number : ${res.code}</div></div>
+<hr/>`;
+
+if (res.rank) {
+resContent += `<div class='row'><div class='col' ><b>Rank : ${res.rank}</b></div></div>
+<div class='row'><div class='col' >Award : ${res.award}</div></div>
+<hr/>`;
+}
+
+if(res.standard+"" != "2" && res.standard+"" != "1") {
+resContent += `<div class='row'><div class='col-3' ><b>Paper</b></div><div class='col-3' ><b>Score</b></div><div class='col-6' ><b>Remarks</b></div></div>`;
+
+let sc = res.score11 + " / 50";
+if(res.remarks11=="ABSENT") sc = "AB";
+resContent += `<div class='row'><div class='col-3' >P1 Language / भाषा </div><div class='col-3' >${sc}</div>
+<div class='col-6' >${res.remarks11}</div></div>`;
+
+sc = res.score12+ " / 100";
+if(res.remarks12=="ABSENT") sc = "AB";
+resContent += `<div class='row'><div class='col-3' >P2 Maths / गणित </div><div class='col-3' >${sc}</div>
+<div class='col-6' >${res.remarks12}</div></div>`;
+
+sc = res.score21+ " / 50";
+if(res.remarks21=="ABSENT") sc = "AB";
+resContent += `<div class='row'><div class='col-3' >P3 Marathi / इंग्रजी </div><div class='col-3' >${sc}</div>
+<div class='col-6' >${res.remarks21}</div></div>`;
+
+sc = res.score22+ " / 100";
+if(res.remarks22=="ABSENT") sc = "AB";
+resContent += `<div class='row'><div class='col-3' >P4 Intelligence / बुद्धिमत्ता </div><div class='col-3' >${sc}</div>
+<div class='col-6' >${res.remarks22}</div></div><hr/>`;
+
+sc = res.score;
+if(res.remarks=="ABSENT") sc = "AB";
+
+resContent += `<div class='row'><div class='col-3' ></div><div class='col-3' ><b>${sc}</b></div>
+<div class='col-6' ><b>${res.remarks}</b></div></div>`;
+    
+    
+}
+else {
+sc = res.score;
+if(res.remarks=="ABSENT") sc = "AB";
+
+resContent += `<div class='row'><div class='col-6' ><b>Score</b></div>
+<div class='col-6' ><b>Remarks</b></div></div>
+<div class='row'><div class='col-6' ><b>${sc}</b></div>
+<div class='col-6' ><b>${res.remarks}</b></div></div>`;
+}
+
+resContent += `<hr/>
+<button name="back" type="cancel" class="btn btn-primary" onclick="window.location.reload()">Back</button>
+`;
+
+document.body.innerHTML = resContent;
+}
+
+    </script>
+
+
+</head>
+
+
+<body style="background:transparent; border: 4px solid #e95420; padding: 16px;">
+<div class="row text-center">
+    <h4>Please provide matching registration details to check results.</h4>
+</div>
+
+<form name="enr" style="padding:8px;" action="./" method="post" >
+  <div class="form-group row">
+    <label for="code" class="col-4 col-form-label">Hall Ticket Number</label> 
+    <div class="col-8">
+      <input id="code" name="code" type="text" class="form-control" aria-describedby="firstHelpBlock" required="required"> 
+      <span id="firstHelpBlock" class="form-text text-muted">As it appears on your hall ticket</span>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="mother" class="col-4 col-form-label">Mother's Name</label> 
+    <div class="col-8">
+      <input id="mother" name="mother" type="text" class="form-control" aria-describedby="motherHelpBlock"> 
+      <span id="motherHelpBlock" class="form-text text-muted">Mother's name provided during registration</span>
+    </div>
+  </div> 
+  <div class="form-group row">
+    <div class="offset-4 col-8">
+      <button name="submit" type="button" class="btn btn-primary" onclick="getResult();" >Submit</button>
+    </div>
+  </div>
+</form>
+</body>
+</html>

@@ -19,10 +19,51 @@ max-height: 124px;
   }
 </style>
 <script>
+
+function showForm() {
+document.body.innerHTML= `
+<div class="row text-center">
+    <img class="logo" src="mpsp_logo_latest_128.webp" />
+</div>
+  <div class="row text-center" style="color:#f5a583" >
+    <h1>Maharashtra Pradnya Shodh Pariksha</h1><hr />
+  </div>
+  <div class="row text-center">
+    <h5>Please provide matching registration details to check results.</h5>
+</div>
+
+<form name="enr" style="padding:8px;" action="./" method="post" >
+  <div class="form-group row">
+    <label for="code" class="col-4 col-form-label">Hall Ticket Number</label> 
+    <div class="col-8">
+      <input id="code" name="code" type="text" class="form-control" aria-describedby="firstHelpBlock" required="required"> 
+      <span id="firstHelpBlock" class="form-text text-muted">As it appears on your hall ticket</span>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="mother" class="col-4 col-form-label">Mother's Name</label> 
+    <div class="col-8">
+      <input id="mother" name="mother" type="text" class="form-control" aria-describedby="motherHelpBlock"> 
+      <span id="motherHelpBlock" class="form-text text-muted">Mother's name provided during registration</span>
+    </div>
+  </div> 
+  <div class="form-group row">
+    <div class="offset-4 col-8">
+      <button name="submit" type="button" class="btn btn-primary" id="submitButton" onclick="getResult();" >Submit</button>
+    </div>
+  </div>
+</form>`;
+
+}
+
 async function getResult() {
+  document.getElementById("submitButton").disabled = true;
   let codeValue = document.getElementById("code").value.toUpperCase();
 let motherName = document.getElementById("mother").value.toUpperCase();
-if(!codeValue && !motherName) return;
+if(!codeValue && !motherName) {
+  document.getElementById("submitButton").disabled = false;
+  return;
+}
 
 let res = null;
 try {
@@ -34,10 +75,9 @@ let resContent = '';
 
 if(!res) {
     resContent += `No such record.<hr/>
-<button name="back" type="cancel" class="btn btn-primary" onclick="window.location.reload()">Back</button>
+<button name="back" type="cancel" class="btn btn-primary" onclick="showForm()">Back</button>
 `;
 document.body.innerHTML = resContent;
-
     return;
 }
 
@@ -137,7 +177,7 @@ document.body.innerHTML = resContent;
   </div> 
   <div class="form-group row">
     <div class="offset-4 col-8">
-      <button name="submit" type="button" class="btn btn-primary" onclick="getResult();" >Submit</button>
+      <button name="submit" type="button" class="btn btn-primary" id="submitButton" onclick="getResult();" >Submit</button>
     </div>
   </div>
 </form>
